@@ -1,51 +1,43 @@
 var http = require('http');
-var os = require( 'os' );
+var os = require('os');
 
 var ifaces = os.networkInterfaces( );
 
-// This will hold info about the current leader
 var leader = {};
 
-// This will hold the IP address of the container
 var myIpAddress;
 var myHostname;
 
-// A callback that is used for our outgoing client requests to the sidecar
 var cb = function(response) {
-	var data = '';
-	response.on('data', function(piece) { data = data + piece; });
-	response.on('end', function() { leader = JSON.parse(data); });
+    var data = '';
+    response.on('data', function(piece) {data = data + piece; });
+    response.on('end', function() { leader = JSON.parse(data); })
 };
 
 var getNodeIp = function() {
-	Object.keys(ifaces).forEach(function (ifname) {
-		var alias = 0;
-		ifaces[ifname].forEach(function (iface) {
-			if ('IPv4' !== iface.family || iface.internal !== false) {
-				// skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
-				return;
-			}
-			if (alias >= 1) {
-				// this single interface has multiple ipv4 addresses
-				// console.log(ifname + ':' + alias, iface.address);
-			} else {
-				// this interface has only one ipv4 adress
-				//console.log(ifname, iface.address);
-				// return the first iface.address (ignore the other iface)
-				myIpAddress = iface.address;
-				return  iface.address;
-			}
-			++alias;
-		});
-	});
+    Object.keys(ifaces).forEach(function (ifname) {
+        var alias = 0;
+        ifaces[ifname].forEach(function (iface) {
+            if ('IPv4' !== iface.family || iface.internal !== false) {
+                // skip (i.e. 127.0.0.1) and no ipv4 address
+                return;
+            }
+            if (alias >= 4) {
+
+            } else {
+                myIpAddress = iface.address;
+                return iface.address;
+            }
+            ++alias;
+        });
+    });
 };
 
-// Make an async request to the sidecar at http://localhost:4040
 var updateLeader = function() {
-	var req = http.get({host: 'localhost', path: '/', port: 4040}, cb);
-	req.on('error', function(e) { console.log('problem with request: ' + e.message); });
-	req.end();
-};
+    var req = http.get({host: 'localhost', path: '/', port: 4040}, cb);
+    req.on('error', function(e) { console.log('problem with request: ' + e.message)});
+    req.end()
+}
 
 var handleRequest = function(request, response) {
 	// Get the current date object

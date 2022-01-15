@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-leader
+  namespace: web-leader
+  labels:
+    app: web-leader
+spec:
+  selector:
+    matchLabels:
+      app: web-leader
+  replicas: 3
+  template:
+      metadata:
+        labels:
+          app: web-leader
+      spec:
+        serviceAccountName: web-leader
+        containers:
+          - name: web-leader
+            # image: fredrikjanssonse/leader-elector:0.6
+            image: gcr.io/google_containers/leader-elector:0.5
+            args:
+            - --election=example
+            - --http=0.0.0.0:4040
+            ports:
+              - name: web-leader
+                containerPort: 80
+                protocol: TCP
+          - name: nodejs-le
+            image: docker.io/keitatomita/leader-serverjs:0.3
+            ports:
+              - containerPort: 8080

@@ -1,0 +1,4 @@
+flask
+kubernetes==21.7.0
+flask_sqlalchemy
+docker

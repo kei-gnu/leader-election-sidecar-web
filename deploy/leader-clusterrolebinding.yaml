@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: web-leader
+  namespace: web-leader
+subjects:
+- kind: ServiceAccount
+  name: web-leader # Name is case sensitive
+  namespace: web-leader
+roleRef:
+  kind: ClusterRole
+  name: web-leader
+  apiGroup: rbac.authorization.k8s.io
