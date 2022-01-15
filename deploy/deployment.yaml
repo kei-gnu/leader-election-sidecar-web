@@ -18,8 +18,8 @@ spec:
         serviceAccountName: web-leader
         containers:
           - name: web-leader
-            # image: fredrikjanssonse/leader-elector:0.6
-            image: gcr.io/google_containers/leader-elector:0.5
+            # image: keitatomita/sidecar-leader-election:3.0
+            image: keitatomita/sidecar-leader-election:4.0
             args:
             - --election=example
             - --http=0.0.0.0:4040
