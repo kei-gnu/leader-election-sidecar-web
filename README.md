@@ -1,6 +1,6 @@
 # leader-election-sidecar-web
 ## Description
-サイドカーを用いたリーダー選出アルゴリズム
+サイドカーを用いたリーダー選出アルゴリズム。
 server.jsコンテナに対してリーダー選出アルゴリズムコンテナが起動し、レプリカPodの中でリーダーを選出する。
 
 ## Usage
